@@ -13,32 +13,31 @@ function App() {
   const getPeople = async () => {
     const response = await fetch(`https://swapi.co/api/people`);
     const data = await response.json();
-    console.log("people test");
     console.log(data);
 
     //home world
-    data.results.map(eachPerson => {
+    data.results.forEach(eachPerson => {
       var eachHomeWorld = getHomeWorld(eachPerson.homeworld);
       eachHomeWorld.then(planet => {
         eachPerson.homeworld = planet;
-        setPeople(curRows => [...curRows, eachPerson]);
       });
     });
 
     //films
-    data.results.map(eachPerson => {
+    data.results.forEach(eachPerson => {
       var eachFilm = getFilms(eachPerson.films);
       eachFilm.then(films => {
         if (films.length === 0) {
           eachPerson.films = "Nil";
         } else {
           eachPerson.films = films.join(", ");
+          setPeople(curRows => [...curRows, eachPerson]);
         }
       });
     });
 
     //species
-    data.results.map(eachPerson => {
+    data.results.forEach(eachPerson => {
       var eachSpecies = getSpecies(eachPerson.species);
       eachSpecies.then(species => {
         eachPerson.species = species;
@@ -46,7 +45,7 @@ function App() {
     });
 
     //vehicles
-    data.results.map(eachPerson => {
+    data.results.forEach(eachPerson => {
       var eachVehicles = getVehicles(eachPerson.vehicles);
       eachVehicles.then(vehicles => {
         if (vehicles.length === 0) {
@@ -58,7 +57,7 @@ function App() {
     });
 
     //starships
-    data.results.map(eachPerson => {
+    data.results.forEach(eachPerson => {
       var eachStarship = getStarship(eachPerson.starships);
       eachStarship.then(starships => {
         if (starships.length === 0) {
@@ -119,8 +118,6 @@ function App() {
     return allPromise;
   }
 
-  
-
   return (
     <div className="app">
       <div className="personBox">
@@ -136,8 +133,10 @@ function App() {
         birth_year={person.birth_year}
         gender={person.gender}
         homeworld={person.homeworld}
-        vehicles={person.vehicles}
         films={person.films}
+        species={person.species}
+        vehicles={person.vehicles}
+        starships={person.starships}
         />
       ))}
       </div>
