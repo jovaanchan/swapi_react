@@ -1,12 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import Person from './Person';
-import HomeWorld from './Misc';
 //import "./App.css";
 
 function App() {
 
   const [people, setPeople] = useState([]);
-  const [homeWorld, setHomeWorld] = useState([]);
 
   useEffect(() => {
     getPeople();
@@ -15,17 +13,113 @@ function App() {
   const getPeople = async () => {
     const response = await fetch(`https://swapi.co/api/people`);
     const data = await response.json();
+    console.log("people test");
     console.log(data);
-    getHomeWorld(data.results.homeworld);
-    setPeople(data.results);
+
+    //home world
+    data.results.map(eachPerson => {
+      var eachHomeWorld = getHomeWorld(eachPerson.homeworld);
+      eachHomeWorld.then(planet => {
+        eachPerson.homeworld = planet;
+        setPeople(curRows => [...curRows, eachPerson]);
+      });
+    });
+
+    //films
+    data.results.map(eachPerson => {
+      var eachFilm = getFilms(eachPerson.films);
+      eachFilm.then(films => {
+        if (films.length === 0) {
+          eachPerson.films = "Nil";
+        } else {
+          eachPerson.films = films.join(", ");
+        }
+      });
+    });
+
+    //species
+    data.results.map(eachPerson => {
+      var eachSpecies = getSpecies(eachPerson.species);
+      eachSpecies.then(species => {
+        eachPerson.species = species;
+      });
+    });
+
+    //vehicles
+    data.results.map(eachPerson => {
+      var eachVehicles = getVehicles(eachPerson.vehicles);
+      eachVehicles.then(vehicles => {
+        if (vehicles.length === 0) {
+          eachPerson.vehicles = "Nil";
+        } else {
+          eachPerson.vehicles = vehicles.join(", ");
+        }
+      });
+    });
+
+    //starships
+    data.results.map(eachPerson => {
+      var eachStarship = getStarship(eachPerson.starships);
+      eachStarship.then(starships => {
+        if (starships.length === 0) {
+          eachPerson.starships = "Nil";
+        } else {
+          eachPerson.starships = starships.join(", ");
+        }
+      });
+    });
+
   };
 
   const getHomeWorld = async (link) => {
-    const response = await fetch(`${link}`);
+    const response = await fetch(`${link}`); 
     const data = await response.json();
-    console.log(data.name);
-    setHomeWorld(data.name);
+    return data.name;
   };
+  
+  const getFilms = async links => {
+    var filmsPromise = links.map(async link => {
+      const response = await fetch(`${link}`);
+      const data = await response.json();
+      return data.title;
+    });
+    var allPromise = Promise.all(filmsPromise).then(film => {
+      return film;
+    });
+    return allPromise;
+  }
+
+  const getSpecies = async (link) => {
+    const response = await fetch(`${link}`); 
+    const data = await response.json();
+    return data.name;
+  };
+
+  const getVehicles = async links => {
+    var vehiclesPromise = links.map(async link => {
+      const response = await fetch(`${link}`);
+      const data = await response.json();
+      return data.name;
+    });
+    var allPromise = Promise.all(vehiclesPromise).then(vehicles => {
+      return vehicles;
+    });
+    return allPromise;
+  }
+
+  const getStarship = async links => {
+    var starshipsPromise = links.map(async link => {
+      const response = await fetch(`${link}`);
+      const data = await response.json();
+      return data.name;
+    });
+    var allPromise = Promise.all(starshipsPromise).then(starships => {
+      return starships;
+    });
+    return allPromise;
+  }
+
+  
 
   return (
     <div className="app">
@@ -41,11 +135,9 @@ function App() {
         eye_color={person.eye_color}
         birth_year={person.birth_year}
         gender={person.gender}
-        />
-      ))}
-      {homeWorld.map(homeworld => (
-        <HomeWorld
-        homeworld={homeworld.homeworld}
+        homeworld={person.homeworld}
+        vehicles={person.vehicles}
+        films={person.films}
         />
       ))}
       </div>

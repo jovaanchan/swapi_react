@@ -8,9 +8,14 @@ const Person = (props) => {
             <p>Mass: {props.mass}</p>
             <p>Hair color: {props.hair_color}</p>
             <p>Skin color: {props.skin_color}</p>
-            <p>eye color: {props.eye_color}</p>
-            <p>birth year: {props.birth_year}</p>
-            <p>gender: {props.gender}</p>
+            <p>Eye color: {props.eye_color}</p>
+            <p>Birth year: {props.birth_year}</p>
+            <p>Gender: {props.gender}</p>
+            <p>Homeworld: {props.homeworld}</p>
+            <p>Films: {props.films}</p>
+            <p>Species: {props.species}</p>
+            <p>Vehicles: {props.vehicles}</p>
+            <p>Starships: {props.starships}</p>
         </div>
     )
 }
