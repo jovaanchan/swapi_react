@@ -1,8 +1,29 @@
-.app {
+.App {
+  text-align: center;
   background-color: black;
+  background-image: url("/space.jpg");
+}
+
+.person{
+  color: white;
+  justify-content: center;
+}
+
+ul{
+  list-style-type: none;
+}
+
+img{
+  height: 300px;
 }
 
 .personBox{
-  color: white;
+  border-radius: 5px;
+  width: 500px;
+  margin: auto;
+  margin-bottom: 30px;
+  padding: 20px;
   justify-content: center;
+  align-items: center;
+  background: rgb(36, 36, 41);
 }

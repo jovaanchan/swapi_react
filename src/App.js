@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Person from './Person';
-//import "./App.css";
+import "./App.css";
 
 function App() {
 
@@ -11,9 +11,10 @@ function App() {
   }, []);
 
   const getPeople = async () => {
-    const response = await fetch(`https://swapi.co/api/people`);
+    const response = await fetch(`https://swapi.co/api/people/?page=1`);
     const data = await response.json();
     console.log(data);
+    
 
     //home world
     data.results.forEach(eachPerson => {
@@ -30,8 +31,9 @@ function App() {
         if (films.length === 0) {
           eachPerson.films = "Nil";
         } else {
-          eachPerson.films = films.join(", ");
+          eachPerson.films = films;
           setPeople(curRows => [...curRows, eachPerson]);
+          //setPeople(data.results);
         }
       });
     });
@@ -51,7 +53,7 @@ function App() {
         if (vehicles.length === 0) {
           eachPerson.vehicles = "Nil";
         } else {
-          eachPerson.vehicles = vehicles.join(", ");
+          eachPerson.vehicles = vehicles;
         }
       });
     });
@@ -67,8 +69,8 @@ function App() {
         }
       });
     });
-
   };
+  
 
   const getHomeWorld = async (link) => {
     const response = await fetch(`${link}`); 
@@ -86,7 +88,7 @@ function App() {
       return film;
     });
     return allPromise;
-  }
+  };
 
   const getSpecies = async (link) => {
     const response = await fetch(`${link}`); 
@@ -104,7 +106,7 @@ function App() {
       return vehicles;
     });
     return allPromise;
-  }
+  };
 
   const getStarship = async links => {
     var starshipsPromise = links.map(async link => {
@@ -116,11 +118,13 @@ function App() {
       return starships;
     });
     return allPromise;
-  }
+  };
 
   return (
-    <div className="app">
-      <div className="personBox">
+    <div className="App">
+      <img src="/starwars.png" alt="STAR WARS"></img>
+
+      <div className="person">
       {people.map(person => (
         <Person 
         key={person.name} //unique key
@@ -142,6 +146,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
 export default App;

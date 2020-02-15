@@ -1,8 +1,9 @@
 import React from 'react';
+import "./App.css";
 
 const Person = (props) => {
     return(
-        <div>
+        <div className={"personBox"}>
             <h1>{props.name}</h1>
             <p>Height: {props.height}</p>
             <p>Mass: {props.mass}</p>
@@ -12,7 +13,12 @@ const Person = (props) => {
             <p>Birth year: {props.birth_year}</p>
             <p>Gender: {props.gender}</p>
             <p>Homeworld: {props.homeworld}</p>
-            <p>Films: {props.films}</p>
+            <p>Films: </p>
+            <ul>
+                {props.films.map(film =>(
+                    <li key={film}>{film}</li>
+                ))}
+            </ul>
             <p>Species: {props.species}</p>
             <p>Vehicles: {props.vehicles}</p>
             <p>Starships: {props.starships}</p>
