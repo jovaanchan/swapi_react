@@ -5,16 +5,21 @@ import "./App.css";
 function App() {
 
   const [people, setPeople] = useState([]);
+  const [id, setId] = useState(1);
+  const [buttonId, setButtonId] = useState(1);
+
+  const handleClick = () => {
+    setButtonId(id)
+  }
 
   useEffect(() => {
     getPeople();
-  }, []);
+  }, [buttonId]);
 
   const getPeople = async () => {
-    const response = await fetch(`https://swapi.co/api/people/?page=1`);
+    const response = await fetch(`https://swapi.co/api/people/?page=${id}`);
     const data = await response.json();
     console.log(data);
-    
 
     //home world
     data.results.forEach(eachPerson => {
@@ -32,8 +37,8 @@ function App() {
           eachPerson.films = "Nil";
         } else {
           eachPerson.films = films;
-          setPeople(curRows => [...curRows, eachPerson]);
-          //setPeople(data.results);
+          //setPeople(curRows => [...curRows, eachPerson]);
+          setPeople(data.results);
         }
       });
     });
@@ -123,7 +128,8 @@ function App() {
   return (
     <div className="App">
       <img src="/starwars.png" alt="STAR WARS"></img>
-
+      <input type="text" value={id} onChange={e => setId(e.target.value)}/>
+      <button type="button" onClick={handleClick}>Fetch page</button>
       <div className="person">
       {people.map(person => (
         <Person 
