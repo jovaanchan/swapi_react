@@ -3,22 +3,24 @@ import Person from './Person';
 import "./App.css";
 
 function App() {
-
+  const [loading, setLoading] = useState(true);
   const [people, setPeople] = useState([]);
   const [id, setId] = useState(1);
-  const [buttonId, setButtonId] = useState(1);
+  const [isClicked, setClicked] = useState(false);
 
   const handleClick = () => {
-    setButtonId(id)
+    setClicked(!isClicked)
+    setPeople([]);
   }
 
   useEffect(() => {
     getPeople();
-  }, [buttonId]);
+  }, [isClicked]);
 
   const getPeople = async () => {
     const response = await fetch(`https://swapi.co/api/people/?page=${id}`);
     const data = await response.json();
+    setLoading(false);
     console.log(data);
 
     //home world
@@ -37,10 +39,11 @@ function App() {
           eachPerson.films = "Nil";
         } else {
           eachPerson.films = films;
-          //setPeople(curRows => [...curRows, eachPerson]);
-          setPeople(data.results);
+          setPeople(curRows => [...curRows, eachPerson]);
         }
       });
+      
+      
     });
 
     //species
@@ -128,27 +131,31 @@ function App() {
   return (
     <div className="App">
       <img src="/starwars.png" alt="STAR WARS"></img>
-      <input type="text" value={id} onChange={e => setId(e.target.value)}/>
-      <button type="button" onClick={handleClick}>Fetch page</button>
+      <div className="person">Enter page number</div>
+      <div>
+        <input type="text" value={id} onChange={e => setId(e.target.value)}/>
+        <button type="button" onClick={handleClick}>Fetch page</button>
+      </div>
       <div className="person">
-      {people.map(person => (
-        <Person 
-        key={person.name} //unique key
-        name={person.name} 
-        height={person.height}
-        mass={person.mass}
-        hair_color={person.hair_color}
-        skin_color={person.skin_color}
-        eye_color={person.eye_color}
-        birth_year={person.birth_year}
-        gender={person.gender}
-        homeworld={person.homeworld}
-        films={person.films}
-        species={person.species}
-        vehicles={person.vehicles}
-        starships={person.starships}
-        />
-      ))}
+        {loading ? "Loading ..." : 
+        people.map(person => (
+          <Person 
+          key={person.name} //unique key
+          name={person.name} 
+          height={person.height}
+          mass={person.mass}
+          hair_color={person.hair_color}
+          skin_color={person.skin_color}
+          eye_color={person.eye_color}
+          birth_year={person.birth_year}
+          gender={person.gender}
+          homeworld={person.homeworld}
+          films={person.films}
+          species={person.species}
+          vehicles={person.vehicles}
+          starships={person.starships}
+          />
+        ))}
       </div>
     </div>
   );
